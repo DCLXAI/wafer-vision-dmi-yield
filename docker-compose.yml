@@ -1,0 +1,115 @@
+services:
+  postgres:
+    image: postgres:16-alpine
+    environment:
+      POSTGRES_DB: wafervision
+      POSTGRES_USER: wafervision
+      POSTGRES_PASSWORD: wafervision
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U wafervision -d wafervision"]
+      interval: 5s
+      timeout: 3s
+      retries: 20
+
+  redis:
+    image: redis:7-alpine
+    ports:
+      - "6379:6379"
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 5s
+      timeout: 3s
+      retries: 20
+
+  api:
+    build: ./backend
+    environment: &backend-env
+      WAFERVISION_DATABASE_URL: postgresql+psycopg://wafervision:wafervision@postgres:5432/wafervision
+      WAFERVISION_REDIS_URL: redis://redis:6379/0
+      WAFERVISION_JOB_BACKEND: ${WAFERVISION_JOB_BACKEND:-rq}
+      WAFERVISION_RATE_LIMIT_BACKEND: ${WAFERVISION_RATE_LIMIT_BACKEND:-redis}
+      WAFERVISION_RATE_LIMIT_FAIL_OPEN: "true"
+      WAFERVISION_DEVICE: cpu
+      WAFERVISION_CHECKPOINT_PATH: ${WAFERVISION_CHECKPOINT_PATH:-artifacts/checkpoints/wafer_cnn_best.pt}
+      WAFERVISION_MODEL_KIND: ${WAFERVISION_MODEL_KIND:-auto}
+    ports:
+      - "8000:8000"
+    volumes:
+      - ./backend/artifacts:/app/artifacts
+      - ./backend/data:/app/data
+    depends_on:
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+
+  rq-worker:
+    build: ./backend
+    command: ["python", "-m", "wafer_vision_api.workers.rq_worker"]
+    environment:
+      <<: *backend-env
+    volumes:
+      - ./backend/artifacts:/app/artifacts
+      - ./backend/data:/app/data
+    depends_on:
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+
+  celery-worker:
+    build: ./backend
+    profiles: ["celery"]
+    command: ["celery", "-A", "wafer_vision_api.jobs.celery_app.celery_app", "worker", "--loglevel=INFO", "--concurrency=1"]
+    environment:
+      <<: *backend-env
+      WAFERVISION_JOB_BACKEND: celery
+    volumes:
+      - ./backend/artifacts:/app/artifacts
+      - ./backend/data:/app/data
+    depends_on:
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+
+  temporal:
+    image: temporalio/auto-setup:1.25
+    profiles: ["temporal"]
+    environment:
+      DB: postgresql
+      DB_PORT: 5432
+      POSTGRES_USER: wafervision
+      POSTGRES_PWD: wafervision
+      POSTGRES_SEEDS: postgres
+    ports:
+      - "7233:7233"
+    depends_on:
+      postgres:
+        condition: service_healthy
+
+  temporal-worker:
+    build: ./backend
+    profiles: ["temporal"]
+    command: ["python", "-m", "wafer_vision_api.workers.temporal_worker"]
+    environment:
+      <<: *backend-env
+      WAFERVISION_JOB_BACKEND: temporal
+      WAFERVISION_TEMPORAL_ADDRESS: temporal:7233
+    volumes:
+      - ./backend/artifacts:/app/artifacts
+      - ./backend/data:/app/data
+    depends_on:
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+      temporal:
+        condition: service_started
+
+volumes:
+  postgres_data:

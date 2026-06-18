@@ -1,0 +1,19 @@
+__pycache__/
+*.py[cod]
+.venv/
+.env
+.DS_Store
+.ipynb_checkpoints/
+.pytest_cache/
+
+# Dataset / generated model files
+data/raw/*.pkl
+data/raw/*.zip
+artifacts/checkpoints/*.pt
+artifacts/reports/*.json
+artifacts/reports/*.csv
+artifacts/reports/*.png
+
+# Runtime API state
+data/runtime/*.db
+data/runtime/*.db-*

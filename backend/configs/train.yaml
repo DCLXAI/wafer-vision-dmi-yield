@@ -1,0 +1,19 @@
+# WaferVision Week 1 baseline config
+# Put Kaggle WM-811K file at data/raw/LSWMD.pkl before training.
+
+data_path: data/raw/LSWMD.pkl
+output_dir: artifacts
+input_size: 64
+include_none: true        # true = 9 classes including None; false = 8 defect-only classes
+batch_size: 256
+num_workers: 2
+epochs: 18
+learning_rate: 0.001
+weight_decay: 0.0001
+dropout: 0.25
+seed: 42
+val_size: 0.15
+test_size: 0.20
+max_samples: null         # set e.g. 50000 for fast local experiments
+augment_train: true
+use_class_weights: true

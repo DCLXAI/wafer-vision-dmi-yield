@@ -1,0 +1,17 @@
+{
+  "name": "WaferVision DMI Yield Intelligence",
+  "short_name": "WaferVision",
+  "description": "Semiconductor yield analytics for class-imbalanced defect detection, DMI feature engineering, simulation, and chamber traceback.",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#e6edf8",
+  "theme_color": "#dbe8fb",
+  "icons": [
+    {
+      "src": "/wafer-icon.svg",
+      "sizes": "120x120",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    }
+  ]
+}

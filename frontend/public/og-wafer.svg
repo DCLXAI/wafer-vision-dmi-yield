@@ -1,0 +1,33 @@
+<svg width="1200" height="630" viewBox="0 0 1200 630" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <rect width="1200" height="630" fill="#e6edf8"/>
+  <rect x="56" y="52" width="1088" height="526" rx="8" fill="#ffffff" stroke="#b5c9eb" stroke-width="2"/>
+  <rect x="56" y="52" width="1088" height="48" fill="#dbe8fb"/>
+  <circle cx="128" cy="320" r="196" fill="#bfd7ee" stroke="#c8792f" stroke-width="8"/>
+  <circle cx="128" cy="320" r="156" stroke="#8398b5" stroke-opacity=".32" stroke-width="3"/>
+  <circle cx="128" cy="320" r="108" stroke="#8398b5" stroke-opacity=".32" stroke-width="3"/>
+  <g opacity=".94">
+    <rect x="66" y="204" width="15" height="15" fill="#8bb6df"/>
+    <rect x="101" y="216" width="15" height="15" fill="#ef5b57"/>
+    <rect x="142" y="218" width="15" height="15" fill="#8bb6df"/>
+    <rect x="171" y="238" width="15" height="15" fill="#ef5b57"/>
+    <rect x="82" y="268" width="15" height="15" fill="#8bb6df"/>
+    <rect x="121" y="286" width="15" height="15" fill="#ef5b57"/>
+    <rect x="164" y="304" width="15" height="15" fill="#ef5b57"/>
+    <rect x="90" y="344" width="15" height="15" fill="#8bb6df"/>
+    <rect x="132" y="366" width="15" height="15" fill="#ef5b57"/>
+    <rect x="186" y="382" width="15" height="15" fill="#8bb6df"/>
+    <rect x="116" y="430" width="15" height="15" fill="#ef5b57"/>
+    <rect x="158" y="448" width="15" height="15" fill="#8bb6df"/>
+  </g>
+  <text x="392" y="246" fill="#243047" font-family="Segoe UI, Arial, sans-serif" font-size="64" font-weight="600">WaferVision</text>
+  <text x="394" y="306" fill="#526176" font-family="Segoe UI, Arial, sans-serif" font-size="30">DMI yield intelligence and chamber traceback</text>
+  <rect x="394" y="354" width="162" height="42" rx="4" fill="#4f79e7"/>
+  <rect x="576" y="354" width="180" height="42" rx="4" fill="#36ec83"/>
+  <rect x="776" y="354" width="190" height="42" rx="4" fill="#ffd84d"/>
+  <text x="424" y="382" fill="#ffffff" font-family="Segoe UI, Arial, sans-serif" font-size="21" font-weight="600">DMI</text>
+  <text x="606" y="382" fill="#1f3a2b" font-family="Segoe UI, Arial, sans-serif" font-size="21" font-weight="600">Recall lift</text>
+  <text x="806" y="382" fill="#3f3320" font-family="Segoe UI, Arial, sans-serif" font-size="21" font-weight="600">BI cockpit</text>
+  <path d="M392 460H1036" stroke="#cbd7e8" stroke-width="2"/>
+  <path d="M392 498C440 472 500 478 548 492C602 508 658 520 708 482C758 444 816 450 864 476C916 504 974 506 1036 466" stroke="#4f79e7" stroke-width="5" fill="none"/>
+  <path d="M392 524C454 510 512 512 566 530C642 555 696 536 754 506C824 470 906 506 1036 516" stroke="#e84d6f" stroke-width="5" fill="none"/>
+</svg>

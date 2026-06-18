@@ -1,0 +1,12 @@
+**/__pycache__/
+**/.pytest_cache/
+**/node_modules/
+**/dist/
+**/.venv/
+**/.env
+*.db
+*.pt
+*.joblib
+*.pkl
+*.pickle
+data/raw/LSWMD.pkl
