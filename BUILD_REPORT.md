@@ -1,63 +1,81 @@
-# WaferVision Enterprise Simulator v0.9 — Build Report
+# WaferVision DMI Yield Intelligence — Build Report
 
 ## Scope
 
-v0.9 replaces the remaining demo-grade persistence and background-job pieces with a production-style worker plane:
+This report reflects the current public GitHub publication build for WaferVision as a DMI yield intelligence portfolio project.
 
-- Postgres is now the default durable database for predictions, simulator sessions, wafer rows, and simulator job status.
-- Redis/RQ is the default background simulator queue.
-- Celery and Temporal adapters are available behind the same `/api/v1/simulator/jobs` contract.
-- Redis-backed rate limiting can be shared across API replicas, with memory fallback for tests.
-- SQLite and inline jobs remain only as explicit laptop/test fallbacks.
+The publication pass includes:
 
-v0.8 performance work is preserved: batched simulator model inference, preview/save separation, compact seeded session persistence, chunked mock generation, Canvas trellis rendering, and lazy chart chunks.
+- DMI-focused README positioning
+- Class imbalance and model metric tables
+- Research-journal style commit convention
+- React app copy cleanup for Korean and English UI
+- Open Graph, manifest, and package metadata cleanup
+- Privacy-preserving simulator run ledger implementation
+- GitHub public repository publication
 
-## Verification
-
-Backend:
-
-```bash
-cd backend
-PYTHONPATH=src pytest -q
-# 24 passed
-```
+## Commands Run
 
 Frontend:
 
 ```bash
 cd frontend
-npm test -- --run
-# 1 test file passed, 2 tests passed
-
 npm run build
-# passed
+npm test
 ```
 
-Latest frontend production chunk check:
+Backend syntax check:
 
-```txt
-DashboardCharts:      3.09 kB
-SimulatorCharts:      4.17 kB
-SpotfireSimulator:   25.10 kB
-App index:           41.38 kB
-vendor-react:       192.67 kB
-vendor-recharts:    378.20 kB
+```bash
+python3 -m py_compile \
+  backend/src/wafer_vision_api/app.py \
+  backend/src/wafer_vision_api/services/model_service.py \
+  backend/src/wafer_vision_api/db_models.py \
+  backend/src/wafer_vision_api/routes/simulator.py \
+  backend/src/wafer_vision_api/settings.py
 ```
 
-## Runtime matrix
+Backend targeted pytest attempted:
 
-| Mode | Database | Queue | Rate limiter | Use case |
-|---|---|---|---|---|
-| production default | Postgres | Redis/RQ | Redis | normal deployed demo/product |
-| Celery adapter | Postgres | Redis/Celery | Redis | teams already using Celery |
-| Temporal adapter | Postgres | Temporal server | Redis | long-running workflow environments |
-| offline fallback | SQLite | inline thread | memory | tests or laptop-only demos |
+```bash
+cd backend
+python3 -m pytest tests/test_simulation_run_logging.py
+```
 
-## Production notes
+## Result
 
-- `WAFERVISION_JOB_POLL_PERSIST_RESULTS=false` keeps job polling payloads small. Workers persist compact sessions and return `session_id`; the frontend fetches `/api/v1/simulator/sessions/{session_id}`.
-- `Base.metadata.create_all()` is intentionally kept for portfolio/local bootstrapping. Use Alembic migrations before real multi-tenant deployment.
-- Simulator risk weights remain empirical and should be calibrated with real fab/yield data before operational use.
-- Temporal support assumes a running Temporal server; the Compose profile includes a starter `temporalio/auto-setup` service for local experimentation.
+| Check | Result | Note |
+|---|---|---|
+| `npm run build` | Passed | Vite production bundle completed |
+| `npm test` | Passed | Vitest: 1 file, 2 tests |
+| Backend `py_compile` | Passed | Edited API/model/logging modules compile |
+| Backend targeted pytest | Blocked by local dependency | Current system Python does not have `skimage` installed |
 
-See `docs/POSTGRES_REDIS_WORKERS_V09.md` for commands and environment variables.
+## Backend Test Dependency Note
+
+The backend test suite imports `wafer_vision.features`, which requires `scikit-image`.
+
+Install backend dependencies before running the full suite:
+
+```bash
+cd backend
+python -m venv .venv
+source .venv/bin/activate
+pip install -r requirements.txt
+PYTHONPATH=src pytest -q
+```
+
+## GitHub Publication
+
+Repository:
+
+```text
+https://github.com/DCLXAI/wafer-vision-dmi-yield
+```
+
+Main publication commits use Conventional Commit style, for example:
+
+```text
+feat: publish DMI yield intelligence platform (06-18)
+docs: update validation notes for GitHub publication (06-18)
+```
